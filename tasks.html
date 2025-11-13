@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المهام - Soma Resthouse</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>صفحة المهام</h1>
+    <nav>
+      <a href="index.html">الرئيسية</a>
+      <a href="bookings.html">الحجوزات</a>
+      <a href="income.html">المدخول</a>
+      <a href="expense.html">الصرف</a>
+    </nav>
+  </header>
+
+  <main>
+    <form id="taskForm">
+      <input type="text" id="taskInput" placeholder="أدخل مهمة جديدة" required>
+      <button type="submit">إضافة</button>
+    </form>
+    <ul id="tasksList"></ul>
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

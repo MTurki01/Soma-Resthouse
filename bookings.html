@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الحجوزات - Soma Resthouse</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>صفحة الحجوزات</h1>
+    <nav>
+      <a href="index.html">الرئيسية</a>
+      <a href="tasks.html">المهام</a>
+      <a href="income.html">المدخول</a>
+      <a href="expense.html">الصرف</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>إضافة حجز جديد</h2>
+    <form id="bookingForm">
+      <input type="text" id="custName" placeholder="اسم الزبون" required>
+      <input type="text" id="custPhone" placeholder="رقم الزبون" required>
+      <input type="number" id="nights" placeholder="عدد الليالي" required>
+      <input type="number" id="price" placeholder="القيمة بالدينار" required>
+      <button type="submit">حفظ الحجز</button>
+    </form>
+
+    <h3>قائمة الحجوزات</h3>
+    <ul id="bookingsList"></ul>
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

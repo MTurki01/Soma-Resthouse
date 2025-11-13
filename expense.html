@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الصرف - Soma Resthouse</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>صفحة الصرف</h1>
+    <nav>
+      <a href="index.html">الرئيسية</a>
+      <a href="bookings.html">الحجوزات</a>
+      <a href="tasks.html">المهام</a>
+      <a href="income.html">المدخول</a>
+    </nav>
+  </header>
+
+  <main>
+    <form id="expenseForm">
+      <input type="text" id="expenseName" placeholder="اسم الزبون" required>
+      <input type="number" id="expenseValue" placeholder="القيمة" required>
+      <input type="date" id="expenseDate" required>
+      <button type="submit">إضافة</button>
+    </form>
+
+    <ul id="expenseList"></ul>
+
+    <button id="calcTotal">إجمالي (المدخول - الصرف)</button>
+    <p id="totalResult"></p>
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
