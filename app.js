@@ -1,6 +1,3 @@
-// ---- Firebase ----
-const db = firebase.database();
-
 // ---- الحجوزات ----
 const bookingForm = document.getElementById('bookingForm');
 if (bookingForm) {
@@ -24,6 +21,17 @@ if (bookingForm) {
       const d = child.val();
       const li = document.createElement('li');
       li.textContent = `${d.name} - ${d.phone} - ${d.nights} ليالي - ${d.price} د.ل`;
+
+      // زر الحذف
+      const delBtn = document.createElement('button');
+      delBtn.textContent = 'حذف';
+      delBtn.style.marginLeft = '10px';
+      delBtn.style.backgroundColor = '#B22222';
+      delBtn.addEventListener('click', () => {
+        db.ref('bookings/' + child.key).remove();
+      });
+
+      li.appendChild(delBtn);
       list.appendChild(li);
     });
   });
@@ -46,9 +54,34 @@ if (taskForm) {
     snap.forEach(child => {
       const d = child.val();
       const li = document.createElement('li');
-      li.textContent = d.text;
-      if (d.done) li.style.textDecoration = 'line-through';
-      li.onclick = () => db.ref('tasks/' + child.key).update({ done: !d.done });
+
+      // مربع الصح
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.checked = d.done;
+      checkbox.style.marginLeft = '10px';
+      checkbox.addEventListener('change', () => {
+        db.ref('tasks/' + child.key).update({ done: checkbox.checked });
+        span.style.textDecoration = checkbox.checked ? 'line-through' : 'none';
+      });
+
+      // نص المهمة
+      const span = document.createElement('span');
+      span.textContent = d.text;
+      if (d.done) span.style.textDecoration = 'line-through';
+
+      // زر الحذف
+      const delBtn = document.createElement('button');
+      delBtn.textContent = 'حذف';
+      delBtn.style.marginLeft = '10px';
+      delBtn.style.backgroundColor = '#B22222';
+      delBtn.addEventListener('click', () => {
+        db.ref('tasks/' + child.key).remove();
+      });
+
+      li.appendChild(checkbox);
+      li.appendChild(span);
+      li.appendChild(delBtn);
       list.appendChild(li);
     });
   });
@@ -76,6 +109,17 @@ if (incomeForm) {
       const d = child.val();
       const li = document.createElement('li');
       li.textContent = `${d.name} - ${d.value} د.ل - ${d.date}`;
+
+      // زر الحذف
+      const delBtn = document.createElement('button');
+      delBtn.textContent = 'حذف';
+      delBtn.style.marginLeft = '10px';
+      delBtn.style.backgroundColor = '#B22222';
+      delBtn.addEventListener('click', () => {
+        db.ref('income/' + child.key).remove();
+      });
+
+      li.appendChild(delBtn);
       list.appendChild(li);
     });
   });
@@ -103,6 +147,17 @@ if (expenseForm) {
       const d = child.val();
       const li = document.createElement('li');
       li.textContent = `${d.name} - ${d.value} د.ل - ${d.date}`;
+
+      // زر الحذف
+      const delBtn = document.createElement('button');
+      delBtn.textContent = 'حذف';
+      delBtn.style.marginLeft = '10px';
+      delBtn.style.backgroundColor = '#B22222';
+      delBtn.addEventListener('click', () => {
+        db.ref('expenses/' + child.key).remove();
+      });
+
+      li.appendChild(delBtn);
       list.appendChild(li);
     });
   });
@@ -119,3 +174,10 @@ if (expenseForm) {
     });
   }
 }
+
+      expenseSnap.forEach(c => totalExpense += c.val().value);
+      document.getElementById('totalResult').textContent = `الإجمالي: ${totalIncome - totalExpense} د.ل`;
+    });
+  }
+}
+
