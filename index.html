@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة الشاليه | Chalet Management</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar glass-panel">
+            <div class="sidebar-header">
+                <img src="logo.jpg" alt="شعار سومة" style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-color);">
+                <h2>استراحة سومة</h2>
+            </div>
+            <ul class="nav-links">
+                <li class="active" data-target="dashboard-section">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>الرئيسية</span>
+                </li>
+                <li data-target="bookings-section">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    <span>الحجوزات</span>
+                </li>
+                <li data-target="financials-section">
+                    <i class="fa-solid fa-wallet"></i>
+                    <span>المالية</span>
+                </li>
+                <li data-target="operations-section">
+                    <i class="fa-solid fa-list-check"></i>
+                    <span>العمليات الإدارية</span>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="top-header glass-panel">
+                <div class="header-title">
+                    <h1 id="page-title">الرئيسية</h1>
+                </div>
+                <div class="header-actions">
+                    <button class="icon-btn"><i class="fa-solid fa-bell"></i></button>
+                    <div class="user-profile">
+                        <img src="https://ui-avatars.com/api/?name=Admin&background=random" alt="User">
+                        <span>المدير</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Dashboard Section -->
+                <section id="dashboard-section" class="content-section active">
+                    <div class="stats-grid">
+                        <div class="stat-card glass-panel">
+                            <div class="stat-icon income-icon"><i class="fa-solid fa-arrow-trend-up"></i></div>
+                            <div class="stat-details">
+                                <h3>الإيرادات (الشهر)</h3>
+                                <p id="totalIncomeDisplay">15,000 ر.س</p>
+                            </div>
+                        </div>
+                        <div class="stat-card glass-panel">
+                            <div class="stat-icon bookings-icon"><i class="fa-solid fa-calendar-check"></i></div>
+                            <div class="stat-details">
+                                <h3>إجمالي الحجوزات</h3>
+                                <p id="totalBookingsDisplay">0 حجز</p>
+                            </div>
+                        </div>
+                        <div class="stat-card glass-panel">
+                            <div class="stat-icon expense-icon"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+                            <div class="stat-details">
+                                <h3>المصروفات</h3>
+                                <p>3,200 ر.س</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="charts-container">
+                        <div class="chart-card glass-panel">
+                            <h3>نظرة عامة على الإيرادات</h3>
+                            <div class="chart-container-wrapper">
+                                <canvas id="revenueChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="chart-card glass-panel">
+                            <h3>نسب الإشغال المباشرة</h3>
+                            <div class="chart-container-wrapper">
+                                <canvas id="occupancyChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Bookings Section -->
+                <section id="bookings-section" class="content-section">
+                    <div class="glass-panel section-header">
+                        <h2>إدارة الحجوزات والتواريخ</h2>
+                        <button class="btn btn-primary" id="openAddBookingModalBtn"><i class="fa-solid fa-plus"></i>
+                            إضافة حجز جديد</button>
+                    </div>
+                    <div class="calendar-container glass-panel mt-3">
+                        <div class="calendar-header">
+                            <button id="nextMonth" class="icon-btn"><i class="fa-solid fa-chevron-right"></i></button>
+                            <h3 id="monthYear"></h3>
+                            <button id="prevMonth" class="icon-btn"><i class="fa-solid fa-chevron-left"></i></button>
+                        </div>
+                        <div class="calendar-grid" id="calendarGrid">
+                            <!-- Calendar Days injected via JS -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Financials Section -->
+                <section id="financials-section" class="content-section">
+                    <div class="glass-panel section-header">
+                        <h2>العمليات المالية</h2>
+                        <div class="actions">
+                            <button class="btn btn-success"><i class="fa-solid fa-plus"></i> إضافة إيراد</button>
+                            <button class="btn btn-danger"><i class="fa-solid fa-minus"></i> إضافة مصروف</button>
+                        </div>
+                    </div>
+                    <div class="table-container glass-panel mt-3">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>التاريخ</th>
+                                    <th>البيان</th>
+                                    <th>النوع</th>
+                                    <th>المبلغ</th>
+                                    <th>الحالة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>2023-10-25</td>
+                                    <td>حجز عائلة أحمد</td>
+                                    <td><span class="badge income">إيراد</span></td>
+                                    <td>1,500 ر.س</td>
+                                    <td><span class="badge status-paid">مكتمل</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Operations Section -->
+                <section id="operations-section" class="content-section">
+                    <div class="glass-panel section-header">
+                        <h2>العمليات الإدارية والتنفيذية</h2>
+                        <button class="btn btn-primary"><i class="fa-solid fa-plus"></i> مهمة جديدة</button>
+                    </div>
+                    <div class="tasks-grid mt-3">
+                        <div class="task-card glass-panel">
+                            <div class="task-header border-warning">
+                                <h4>تنظيف الشاليه (قبل الدخول)</h4>
+                                <span class="badge bg-warning">قيد التنفيذ</span>
+                            </div>
+                            <p>تجهيز مرافق الشاليه للحجز القادم.</p>
+                            <div class="task-footer">
+                                <span><i class="fa-regular fa-clock"></i> اليوم 2:00 م</span>
+                                <button class="btn btn-sm">إنجاز</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Booking Modal -->
+    <div id="addBookingModal" class="modal-overlay">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h2>إضافة حجز جديد</h2>
+                <button class="close-modal-btn" id="closeAddBookingModalBtn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="addBookingForm">
+                <div class="form-group">
+                    <label for="clientName">اسم العميل</label>
+                    <input type="text" id="clientName" required placeholder="مثال: محمد عبدالله">
+                </div>
+                <div class="form-group">
+                    <label for="bookingStartDate">تاريخ بداية الحجز</label>
+                    <input type="date" id="bookingStartDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="bookingDaysCount">عدد الأيام</label>
+                    <input type="number" id="bookingDaysCount" min="1" required placeholder="مثال: 3">
+                </div>
+                <div class="form-group">
+                    <label for="bookingDailyPrice">مبلغ التأجير (لكل يوم)</label>
+                    <input type="number" id="bookingDailyPrice" required placeholder="مثال: 1500">
+                </div>
+                <div class="form-group">
+                    <label>إجمالي المبلغ: <span id="totalBookingPriceDisplay" class="text-primary font-bold">0</span> ر.س</label>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-danger" id="cancelBookingBtn">إلغاء</button>
+                    <button type="submit" class="btn btn-success">حفظ الحجز</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Financial Modal -->
+    <div id="addFinancialModal" class="modal-overlay">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h2 id="financialModalTitle">إضافة سجل مالي</h2>
+                <button class="close-modal-btn" id="closeFinancialModalBtn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="addFinancialForm">
+                <input type="hidden" id="financialType" value="">
+                <div class="form-group">
+                    <label for="financialDesc">البيان (الوصف)</label>
+                    <input type="text" id="financialDesc" required placeholder="مثال: صيانة مسبح">
+                </div>
+                <div class="form-group">
+                    <label for="financialAmount">المبلغ (ر.س)</label>
+                    <input type="number" id="financialAmount" required placeholder="مثال: 500">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-danger" id="cancelFinancialBtn">إلغاء</button>
+                    <button type="submit" class="btn btn-success">حفظ السجل</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Task Modal -->
+    <div id="addTaskModal" class="modal-overlay">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h2>إضافة مهمة جديدة</h2>
+                <button class="close-modal-btn" id="closeTaskModalBtn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="addTaskForm">
+                <div class="form-group">
+                    <label for="taskTitle">عنوان المهمة</label>
+                    <input type="text" id="taskTitle" required placeholder="مثال: تنظيف الشاليه">
+                </div>
+                <div class="form-group">
+                    <label for="taskDesc">التفاصيل</label>
+                    <input type="text" id="taskDesc" placeholder="ملاحظات إضافية...">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-danger" id="cancelTaskBtn">إلغاء</button>
+                    <button type="submit" class="btn btn-success">إنشاء المهمة</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Firebase Imports (Compat version to support local file execution) -->
+    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore-compat.js"></script>
+
+    <!-- App Logic -->
+    <script src="app.js"></script>
+</body>
+
+</html>
