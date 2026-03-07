@@ -12,10 +12,8 @@ const firebaseConfig = {
 
 // تهيئة تطبيق Firebase وقاعدة البيانات (Compat Version)
 firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
-// مرجع لجدول الحجوزات في قاعدة البيانات
-const bookingsCollection = db.collection("bookings");
+const db = firebase.database();
+const bookingsRef = db.ref("bookings");
 
 // متغيرات عامة لحفظ البيانات الحية
 let globalBookings = [];
@@ -121,13 +119,14 @@ function initModals() {
         const totalPrice = days * dailyPrice;
 
         try {
-            await bookingsCollection.add({
-                clientName: clientName,
-                date: startDate, // تاريخ البداية
-                daysCount: days, // نحتاجها لطباعة الأيام المتتالية في التقويم
-                dailyPrice: dailyPrice,
-                price: totalPrice,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+          await bookingsRef.push({
+    clientName: clientName,
+    date: startDate,
+    daysCount: days,
+    dailyPrice: dailyPrice,
+    price: totalPrice,
+    timestamp: firebase.database.ServerValue.TIMESTAMP
+});
             });
             bookingForm.reset();
             totalPriceDisplay.textContent = '0';
@@ -234,15 +233,22 @@ function initModals() {
 function fetchBookingsRealtime() {
     // استعلام لجلب الحجوزات مرتبة حسب الإضافة
     // onSnapshot تُنفذ هذا الكود تلقائياً كلما تغيرت البيانات أو أُضيف حجز جديد
-    bookingsCollection.orderBy("timestamp", "asc").onSnapshot((snapshot) => {
-        const bookingsList = [];
-        let totalIncome = 0;
+ bookingsRef.orderByChild("timestamp").on("value", (snapshot) => {
+    const bookingsList = [];
+    let totalIncome = 0;
 
-        snapshot.forEach((doc) => {
-            const data = doc.data();
-            bookingsList.push({ id: doc.id, ...data });
-            totalIncome += (data.price || 0);
-        });
+    snapshot.forEach((childSnapshot) => {
+        const data = childSnapshot.val();
+        bookingsList.push({ id: childSnapshot.key, ...data });
+        totalIncome += (data.price || 0);
+    });
+
+    globalBookings = bookingsList;
+
+    updateDashboardStats(globalBookings.length, totalIncome);
+    updateCalendar(new Date());
+    updateCharts(globalBookings);
+});
 
         // تحديث المتغير العام
         globalBookings = bookingsList;
